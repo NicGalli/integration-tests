@@ -20,6 +20,7 @@
 		<junit.version>5.11.0</junit.version>
 		<assertj.version>3.26.0</assertj.version>
 		<mockito.version>5.12.0</mockito.version>
+		<testContainers.version>1.20.2</testContainers.version>
 
 		<jacocoCoverageThreshold>0.50</jacocoCoverageThreshold>
 	</properties>
@@ -73,6 +74,18 @@
 			<groupId>de.bwaldvogel</groupId>
 			<artifactId>mongo-java-server</artifactId>
 			<version>1.11.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<version>${testContainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${testContainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -154,7 +167,7 @@
 								<goal>add-test-source</goal>
 							</goals>
 							<configuration>
-								<sources>
+																<sources>
 									<source>src/it/java</source>
 								</sources>
 							</configuration>
