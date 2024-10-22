@@ -2,6 +2,7 @@ package com.example.school.repository.mongo;
 
 import static com.example.school.repository.mongo.StudentMongoRepository.SCHOOL_DB_NAME;
 import static com.example.school.repository.mongo.StudentMongoRepository.STUDENT_COLLECTION_NAME;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +12,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.example.school.model.Student;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
@@ -19,17 +21,16 @@ import com.mongodb.client.MongoDatabase;;
 @Testcontainers
 class StudentMongoRepositoryTestcontainersIT {
 
-	@SuppressWarnings({ "rawtypes", "resource" })
+	// @SuppressWarnings({ "rawtypes", "resource" })
 	@Container
-	public static final GenericContainer mongo = new GenericContainer("mongo:4.4.3").withExposedPorts(27017);
-
+	public static final GenericContainer<?> mongo = new GenericContainer<>("mongo:4.4.3").withExposedPorts(27017);
 	private MongoClient client;
 	private StudentMongoRepository studentRepository;
 	private MongoCollection<Document> studentCollection;
 
 	@BeforeEach
 	void setup() {
-		client = new MongoClient(new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017)));
+		client = new MongoClient(new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017)));
 		studentRepository = new StudentMongoRepository(client);
 		MongoDatabase database = client.getDatabase(SCHOOL_DB_NAME);
 		database.drop();
@@ -42,7 +43,13 @@ class StudentMongoRepositoryTestcontainersIT {
 	}
 
 	@Test
-	void test() {
+	void testFindAll() {
+		addTestStudentToDatabase("1", "test1");
+		addTestStudentToDatabase("2", "test2");
+		assertThat(studentRepository.findAll()).containsExactly(new Student("1", "test1"), new Student("2", "test2"));
+	}
 
+	private void addTestStudentToDatabase(String id, String name) {
+		studentCollection.insertOne(new Document().append("id", id).append("name", name));
 	}
 }
