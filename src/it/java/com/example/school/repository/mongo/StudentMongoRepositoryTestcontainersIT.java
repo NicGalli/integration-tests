@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -23,7 +24,7 @@ class StudentMongoRepositoryTestcontainersIT {
 
 	// @SuppressWarnings({ "rawtypes", "resource" })
 	@Container
-	public static final GenericContainer<?> mongo = new GenericContainer<>("mongo:4.4.3").withExposedPorts(27017);
+	public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
 	private MongoClient client;
 	private StudentMongoRepository studentRepository;
 	private MongoCollection<Document> studentCollection;
@@ -48,8 +49,17 @@ class StudentMongoRepositoryTestcontainersIT {
 		addTestStudentToDatabase("2", "test2");
 		assertThat(studentRepository.findAll()).containsExactly(new Student("1", "test1"), new Student("2", "test2"));
 	}
+	
+	@Test
+	void testFindById() {
+		addTestStudentToDatabase("1", "test1");
+		addTestStudentToDatabase("2", "test2");
+		assertThat(studentRepository.findById("1")).isEqualTo(new Student("1", "test1"));
+	}
 
 	private void addTestStudentToDatabase(String id, String name) {
 		studentCollection.insertOne(new Document().append("id", id).append("name", name));
+		
+		
 	}
 }

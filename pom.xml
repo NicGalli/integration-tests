@@ -78,7 +78,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers</artifactId>
+			<artifactId>mongodb</artifactId>
 			<version>${testContainers.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -105,6 +105,19 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.5.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -167,7 +180,7 @@
 								<goal>add-test-source</goal>
 							</goals>
 							<configuration>
-																<sources>
+								<sources>
 									<source>src/it/java</source>
 								</sources>
 							</configuration>
