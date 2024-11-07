@@ -1,7 +1,12 @@
 package com.example.school.controller;
 
+import static org.mockito.Mockito.verify;
+
+import static java.util.Arrays.asList;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -10,27 +15,52 @@ import com.example.school.repository.StudentRepository;
 import com.example.school.repository.mongo.StudentMongoRepository;
 import com.example.school.view.StudentView;
 import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 
 public class SchoolControllerIT {
-@Mock
-private StudentView studentView;
-private StudentRepository studentRepository;
-private SchoolController schoolController;
+	@Mock
+	StudentView studentView;
+	StudentRepository studentRepository;
+	SchoolController schoolController;
 
-private AutoCloseable closeable;
+	AutoCloseable closeable;
+	static int mongoPort = Integer.parseInt(System.getProperty("mongo.port", "27017"));
 
-@BeforeEach
-void setup() {
-	closeable = MockitoAnnotations.openMocks(this);
-	studentRepository = new StudentMongoRepository(new MongoClient("localhost"));
-	for(Student student:studentRepository.findAll()) {
-		studentRepository.delete(student.getId());
+	@BeforeEach
+	void setup() {
+		closeable = MockitoAnnotations.openMocks(this);
+		studentRepository = new StudentMongoRepository(new MongoClient(new ServerAddress("localhost", mongoPort)));
+		for (Student student : studentRepository.findAll()) {
+			studentRepository.delete(student.getId());
+		}
+		schoolController = new SchoolController(studentView, studentRepository);
 	}
-	schoolController = new SchoolController(studentView, studentRepository);
-}
 
-@AfterEach
-void close() throws Exception {
-	closeable.close();
-}
+	@Test
+	void testAllStudents() {
+		Student student = new Student("1", "test1");
+		studentRepository.save(student);
+		schoolController.allStudents();
+		verify(studentView).showAllStudents(asList(student));
+	}
+
+	@Test
+	void testNewStudent() {
+		Student student = new Student("1", "test1");
+		schoolController.newStudent(student);
+		verify(studentView).studentAdded(student);
+	}
+
+	@Test
+	void testDeleteStudent() {
+		Student student = new Student("1", "test1");
+		studentRepository.save(student);
+		schoolController.deleteStudent(student);
+		verify(studentView).studentRemoved(student);
+	}
+
+	@AfterEach
+	void close() throws Exception {
+		closeable.close();
+	}
 }
