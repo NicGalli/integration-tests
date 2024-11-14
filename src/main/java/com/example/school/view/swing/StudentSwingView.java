@@ -64,7 +64,7 @@ public class StudentSwingView extends JFrame implements StudentView{
 		contentPane.add(lblId, gbc_lblId);
 		
 		txtIdtextbox = new JTextField();
-		txtIdtextbox.setText("idTextBox");
+		txtIdtextbox.setName("idTextBox");
 		GridBagConstraints gbc_txtIdtextbox = new GridBagConstraints();
 		gbc_txtIdtextbox.anchor = GridBagConstraints.NORTHWEST;
 		gbc_txtIdtextbox.gridx = 2;
