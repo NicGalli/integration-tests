@@ -18,7 +18,7 @@
 
 		<log4j.version>2.23.1</log4j.version>
 		<junit.version>5.11.0</junit.version>
-		<assertj.version>3.26.0</assertj.version>
+		<assertj.version>3.17.1</assertj.version>
 		<mockito.version>5.12.0</mockito.version>
 		<testContainers.version>1.20.2</testContainers.version>
 
@@ -30,6 +30,11 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -44,7 +49,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
+			<artifactId>assertj-swing-junit</artifactId>
 			<version>${assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
