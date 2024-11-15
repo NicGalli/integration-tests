@@ -6,16 +6,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import com.example.school.model.Student;
 import com.example.school.view.StudentView;
-import javax.swing.JButton;
-import javax.swing.JList;
 
 public class StudentSwingView extends JFrame implements StudentView {
 
@@ -113,6 +113,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 		contentPane.add(btnDeleteSelected, gbc_btnDeleteSelected);
 		
 		label = new JLabel(" ");
+		label.setEnabled(false);
 		label.setName("errorMessageLabel");
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.insets = new Insets(0, 0, 5, 0);
