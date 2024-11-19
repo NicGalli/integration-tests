@@ -106,6 +106,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 		contentPane.add(btnAdd, gbc_btnAdd);
 		
 		btnDeleteSelected = new JButton("Delete Selected");
+		btnDeleteSelected.setEnabled(false);
 		GridBagConstraints gbc_btnDeleteSelected = new GridBagConstraints();
 		gbc_btnDeleteSelected.insets = new Insets(0, 0, 5, 5);
 		gbc_btnDeleteSelected.gridx = 1;
