@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,8 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.example.school.controller.SchoolController;
 import com.example.school.model.Student;
 import com.example.school.view.StudentView;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JScrollPane;
 
 public class StudentSwingView extends JFrame implements StudentView {
 
@@ -23,11 +29,24 @@ public class StudentSwingView extends JFrame implements StudentView {
 	private JPanel contentPane;
 	private JTextField txtIdtextbox;
 	private JLabel lblName;
-	private JTextField textField;
+	private JTextField nameTextField;
 	private JButton btnAdd;
-	private JList list;
+	private JList<Student> listStudents;
+	private DefaultListModel<Student> listStudentsModel;
+
+	DefaultListModel<Student> getListStudentsModel() {
+		return listStudentsModel;
+	}
+
 	private JButton btnDeleteSelected;
 	private JLabel label;
+
+	JLabel getLabel() {
+		return label;
+	}
+
+	private JScrollPane scrollPane;
+	private SchoolController schoolController;
 
 	/**
 	 * Launch the application.
@@ -49,6 +68,8 @@ public class StudentSwingView extends JFrame implements StudentView {
 	 * Create the frame.
 	 */
 	public StudentSwingView() {
+		listStudentsModel = new DefaultListModel<>();
+		listStudents = new JList<>(listStudentsModel);
 		setTitle("Student View");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -58,9 +79,9 @@ public class StudentSwingView extends JFrame implements StudentView {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 159, 12, 114, 0 };
-		gbl_contentPane.rowHeights = new int[] { 21, 0, 0, 0, 0, 0 };
-		gbl_contentPane.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_contentPane.rowHeights = new int[] { 21, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 
 		JLabel lblId = new JLabel("id");
@@ -71,6 +92,14 @@ public class StudentSwingView extends JFrame implements StudentView {
 		contentPane.add(lblId, gbc_lblId);
 
 		txtIdtextbox = new JTextField();
+		KeyAdapter addBtnEnabler = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnAdd.setEnabled(!txtIdtextbox.getText().isBlank() && !nameTextField.getText().isBlank());
+			}
+
+		};
+		txtIdtextbox.addKeyListener(addBtnEnabler);
 		txtIdtextbox.setName("idTextBox");
 		GridBagConstraints gbc_txtIdtextbox = new GridBagConstraints();
 		gbc_txtIdtextbox.fill = GridBagConstraints.HORIZONTAL;
@@ -87,16 +116,17 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_lblName.gridy = 2;
 		contentPane.add(lblName, gbc_lblName);
 
-		textField = new JTextField();
-		textField.setName("nameTextBox");
+		nameTextField = new JTextField();
+		nameTextField.addKeyListener(addBtnEnabler);
+		nameTextField.setName("nameTextBox");
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 2;
-		contentPane.add(textField, gbc_textField);
-		textField.setColumns(10);
-		
+		contentPane.add(nameTextField, gbc_textField);
+		nameTextField.setColumns(10);
+
 		btnAdd = new JButton("Add");
 		btnAdd.setEnabled(false);
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -104,7 +134,10 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_btnAdd.gridx = 0;
 		gbc_btnAdd.gridy = 3;
 		contentPane.add(btnAdd, gbc_btnAdd);
-		
+
+		btnAdd.addActionListener(
+				e -> schoolController.newStudent(new Student(txtIdtextbox.getText(), nameTextField.getText())));
+
 		btnDeleteSelected = new JButton("Delete Selected");
 		btnDeleteSelected.setEnabled(false);
 		GridBagConstraints gbc_btnDeleteSelected = new GridBagConstraints();
@@ -112,48 +145,63 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_btnDeleteSelected.gridx = 1;
 		gbc_btnDeleteSelected.gridy = 3;
 		contentPane.add(btnDeleteSelected, gbc_btnDeleteSelected);
-		
+
 		label = new JLabel(" ");
 		label.setEnabled(false);
 		label.setName("errorMessageLabel");
 		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.insets = new Insets(0, 0, 5, 0);
-		gbc_label.gridx = 2;
-		gbc_label.gridy = 3;
+		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.gridx = 1;
+		gbc_label.gridy = 4;
 		contentPane.add(label, gbc_label);
-		
-		list = new JList();
-		list.setName("studentList");
-		GridBagConstraints gbc_list = new GridBagConstraints();
-		gbc_list.insets = new Insets(0, 0, 0, 5);
-		gbc_list.fill = GridBagConstraints.BOTH;
-		gbc_list.gridx = 1;
-		gbc_list.gridy = 4;
-		contentPane.add(list, gbc_list);
+
+		scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 1;
+		gbc_scrollPane.gridy = 5;
+		contentPane.add(scrollPane, gbc_scrollPane);
+
+		scrollPane.setViewportView(listStudents);
+		listStudents.setName("studentList");
+
+		listStudents.addListSelectionListener(
+				e -> btnDeleteSelected.setEnabled(listStudents.getSelectedIndex() != -1));
+		btnDeleteSelected.addActionListener(
+				e -> schoolController.deleteStudent(listStudents.getSelectedValue()));
 	}
 
 	@Override
 	public void showAllStudents(List<Student> students) {
-		// TODO Auto-generated method stub
-
+		listStudentsModel.addAll(students);
 	}
 
 	@Override
 	public void showError(String message, Student student) {
-		// TODO Auto-generated method stub
+		label.setText(message + student.toString());
 
 	}
 
 	@Override
 	public void studentAdded(Student student) {
-		// TODO Auto-generated method stub
+		resetErrorLabel();
+		listStudentsModel.addElement(student);
 
+	}
+
+	private void resetErrorLabel() {
+		label.setText(" ");
 	}
 
 	@Override
 	public void studentRemoved(Student student) {
-		// TODO Auto-generated method stub
+		resetErrorLabel();
+		listStudentsModel.removeElement(student);
+	}
 
+	void setSchoolController(SchoolController schoolController) {
+		this.schoolController = schoolController;
 	}
 
 }
