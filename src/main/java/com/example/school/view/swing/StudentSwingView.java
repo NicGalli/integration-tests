@@ -200,7 +200,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 		listStudentsModel.removeElement(student);
 	}
 
-	void setSchoolController(SchoolController schoolController) {
+	public void setSchoolController(SchoolController schoolController) {
 		this.schoolController = schoolController;
 	}
 
