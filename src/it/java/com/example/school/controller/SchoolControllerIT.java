@@ -1,8 +1,7 @@
 package com.example.school.controller;
 
-import static org.mockito.Mockito.verify;
-
 import static java.util.Arrays.asList;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,15 @@ public class SchoolControllerIT {
 	SchoolController schoolController;
 
 	AutoCloseable closeable;
-	static int mongoPort = Integer.parseInt(System.getProperty("mongo.port", "27017"));
+	static int mongoPort = portNumber();
+
+	private static int portNumber() {
+		if (System.getProperty("mongo.port") == null) {
+			return 27017;
+		} else {
+			return Integer.parseInt(System.getProperty("mongo.port", "27017"));
+		}
+	}
 
 	@BeforeEach
 	void setup() {

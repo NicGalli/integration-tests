@@ -1,9 +1,13 @@
 package com.example.school.view.swing;
 
+import static javax.swing.SwingUtilities.invokeLater;
+
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -12,16 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import com.example.school.controller.SchoolController;
 import com.example.school.model.Student;
 import com.example.school.view.StudentView;
-
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import javax.swing.JScrollPane;
 
 public class StudentSwingView extends JFrame implements StudentView {
 
@@ -135,8 +136,17 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_btnAdd.gridy = 3;
 		contentPane.add(btnAdd, gbc_btnAdd);
 
-		btnAdd.addActionListener(
-				e -> schoolController.newStudent(new Student(txtIdtextbox.getText(), nameTextField.getText())));
+		btnAdd.addActionListener(e -> {
+			new Thread(() -> {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				schoolController.newStudent(new Student(txtIdtextbox.getText(), nameTextField.getText()));
+			}).start();
+		});
 
 		btnDeleteSelected = new JButton("Delete Selected");
 		btnDeleteSelected.setEnabled(false);
@@ -166,10 +176,8 @@ public class StudentSwingView extends JFrame implements StudentView {
 		scrollPane.setViewportView(listStudents);
 		listStudents.setName("studentList");
 
-		listStudents.addListSelectionListener(
-				e -> btnDeleteSelected.setEnabled(listStudents.getSelectedIndex() != -1));
-		btnDeleteSelected.addActionListener(
-				e -> schoolController.deleteStudent(listStudents.getSelectedValue()));
+		listStudents.addListSelectionListener(e -> btnDeleteSelected.setEnabled(listStudents.getSelectedIndex() != -1));
+		btnDeleteSelected.addActionListener(e -> schoolController.deleteStudent(listStudents.getSelectedValue()));
 	}
 
 	@Override
@@ -179,14 +187,16 @@ public class StudentSwingView extends JFrame implements StudentView {
 
 	@Override
 	public void showError(String message, Student student) {
-		label.setText(message + student.toString());
+		invokeLater(() -> label.setText(message + student.toString()));
 
 	}
 
 	@Override
 	public void studentAdded(Student student) {
-		resetErrorLabel();
-		listStudentsModel.addElement(student);
+		invokeLater(() -> {
+			resetErrorLabel();
+			listStudentsModel.addElement(student);
+		});
 
 	}
 

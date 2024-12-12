@@ -93,6 +93,12 @@
 			<version>${testContainers.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>4.0.2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -158,7 +164,7 @@
 				<version>3.5.2</version>
 				<configuration>
 					<systemPropertyVariables>
-						<mongo.port>${mongo.mapped.port}</mongo.port>
+						 <mongo.port>${mongo.mapped.port}</mongo.port>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
