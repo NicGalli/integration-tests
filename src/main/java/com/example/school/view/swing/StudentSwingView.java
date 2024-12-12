@@ -136,17 +136,8 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_btnAdd.gridy = 3;
 		contentPane.add(btnAdd, gbc_btnAdd);
 
-		btnAdd.addActionListener(e -> {
-			new Thread(() -> {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				schoolController.newStudent(new Student(txtIdtextbox.getText(), nameTextField.getText()));
-			}).start();
-		});
+		btnAdd.addActionListener(
+				e -> schoolController.newStudent(new Student(txtIdtextbox.getText(), nameTextField.getText())));
 
 		btnDeleteSelected = new JButton("Delete Selected");
 		btnDeleteSelected.setEnabled(false);
