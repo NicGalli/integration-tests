@@ -9,6 +9,8 @@ import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -59,7 +61,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 					StudentSwingView frame = new StudentSwingView();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Exception", e);
 				}
 			}
 		});
