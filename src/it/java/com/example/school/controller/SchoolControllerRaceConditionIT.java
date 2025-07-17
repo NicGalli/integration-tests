@@ -1,6 +1,14 @@
 package com.example.school.controller;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -38,4 +46,35 @@ class SchoolControllerRaceConditionIT {
 		}
 		schoolController = new SchoolController(studentView, studentRepository);
 	}
+
+	@Test
+	void testNewStudentConcurrency() {
+		Student student = new Student("1", "test");
+
+		List<Thread> threads = IntStream.range(0, 10).mapToObj(i -> new Thread(() -> {
+			new SchoolController(studentView, studentRepository).newStudent(student);
+		})).peek(t -> t.start()).collect(Collectors.toList());
+		await().atMost(10, SECONDS).until(()->threads.stream().noneMatch(Thread::isAlive));
+		
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
