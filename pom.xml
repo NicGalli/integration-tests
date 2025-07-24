@@ -164,7 +164,7 @@
 				<version>3.5.2</version>
 				<configuration>
 					<systemPropertyVariables>
-						 <mongo.port>${mongo.mapped.port}</mongo.port>
+						<mongo.port>${mongo.mapped.port}</mongo.port>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
@@ -180,7 +180,28 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.6.1</version>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6.3</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+
 		<pluginManagement><!-- lock down plugins versions to avoid using Maven
 			defaults (may be moved to parent pom) -->
 			<plugins>
@@ -244,6 +265,11 @@
 							</configuration>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+			<groupId>org.sonarsource.scanner.maven</groupId>	
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>5.1.0.4</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

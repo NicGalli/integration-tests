@@ -49,7 +49,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 	}
 
 	private JScrollPane scrollPane;
-	private SchoolController schoolController;
+	private transient SchoolController schoolController;
 
 	/**
 	 * Launch the application.
