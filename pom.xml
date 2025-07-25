@@ -28,6 +28,8 @@
 		<sonar.issue.ignore.multicriteria.e01.ruleKey>java:S117</sonar.issue.ignore.multicriteria.e01.ruleKey>
 		<sonar.issue.ignore.multicriteria.e01.resourceKey>
 			**/StudentSwingView.java</sonar.issue.ignore.multicriteria.e01.resourceKey>
+			
+			<sonar.host.url>http://localhost:9000</sonar.host.url>
 
 	</properties>
 
