@@ -31,7 +31,7 @@
 
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
 		
-		<sonar.coverage.exclusions>**/model/*.*, **/SchoolSwingApp.*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/model/*.*, **/StudentSwingView.*</sonar.coverage.exclusions>
 
 	</properties>
 
