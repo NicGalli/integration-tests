@@ -30,8 +30,14 @@
 			**/StudentSwingView.java</sonar.issue.ignore.multicriteria.e01.resourceKey>
 
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
-		
-		<sonar.coverage.exclusions>**/model/*.*, **/StudentSwingView.*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>
+			**/model/*.*,
+			**/StudentSwingView.*
+		</sonar.coverage.exclusions>
+		<sonar.junit.reportPaths>
+			${project.build.directory}/surefire-reports,
+			${project.build.directory}/failsafe-reports
+		</sonar.junit.reportPaths>
 
 	</properties>
 
