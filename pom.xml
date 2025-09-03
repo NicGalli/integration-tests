@@ -30,6 +30,8 @@
 			**/StudentSwingView.java</sonar.issue.ignore.multicriteria.e01.resourceKey>
 
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		
+		<sonar.coverage.exclusions>**/model/*.*, **/SchoolSwingApp.*</sonar.coverage.exclusions>
 
 	</properties>
 
