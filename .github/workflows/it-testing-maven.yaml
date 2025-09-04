@@ -27,7 +27,7 @@ jobs:
       run: >
         xvfb-run mvn clean verify 
         -Pjacoco sonar:sonar
-        -Dsonar.organization=nicgalli
+        -Dsonar.organization=NicGalli
         -Dsonar.host.url=https://sonarcloud.io
       env:
         SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
