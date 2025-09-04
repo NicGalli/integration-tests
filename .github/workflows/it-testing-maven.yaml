@@ -18,7 +18,9 @@ jobs:
     - name: Cache m2 folder
       uses: actions/cache@v4
       with:
-        path: ~/.m2
+        path:
+          ~/.m2
+		  ~/.sonar/cache
         key: m2-${{hashFiles('**/pom.xml', '**/*.yaml')}}
         restore-keys: m2-
     - name: Build with Maven
@@ -30,6 +32,7 @@ jobs:
         -Dsonar.host.url=https://sonarcloud.io
       env:
         SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+		GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Archive Junit Report
       uses: actions/upload-artifact@v4
       with:
