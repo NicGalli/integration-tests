@@ -29,6 +29,5 @@ jobs:
         -Pjacoco org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
         -Dsonar.projectKey=NicGalli_integration-tests
         -Dsonar.host.url=https://sonarcloud.io
-		-Dsonar.organization=nicgalli-github
       env:
         SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
