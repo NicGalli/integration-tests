@@ -25,8 +25,8 @@ jobs:
         restore-keys: m2-
     - name: Build with Maven
       run: >
-        xvfb-run mvn -e clean verify 
-        -Pjacoco org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
+        xvfb-run mvn verify 
+        -Pjacoco sonar:sonar 
         -Dsonar.projectKey=NicGalli_integration-tests
         -Dsonar.host.url=https://sonarcloud.io
       env:
