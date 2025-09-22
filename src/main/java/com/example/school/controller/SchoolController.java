@@ -3,12 +3,16 @@ package com.example.school.controller;
 import com.example.school.model.Student;
 import com.example.school.repository.StudentRepository;
 import com.example.school.view.StudentView;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
 public class SchoolController {
 	private StudentView studentView;
 	private StudentRepository studentRepository;
 
-	public SchoolController(StudentView studentView, StudentRepository studentRepository) {
+
+	@Inject
+	public SchoolController(@Assisted StudentView studentView, StudentRepository studentRepository) {
 		this.studentView = studentView;
 		this.studentRepository = studentRepository;
 	}
