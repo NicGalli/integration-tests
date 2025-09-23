@@ -56,7 +56,6 @@ public class StudentSwingView extends JFrame implements StudentView {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-
 			public void run() {
 				try {
 					StudentSwingView frame = new StudentSwingView();
@@ -79,28 +78,29 @@ public class StudentSwingView extends JFrame implements StudentView {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 159, 12, 114, 0 };
 		gbl_contentPane.rowHeights = new int[] { 21, 0, 0, 0, 0, 0, 0 };
 		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-			Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
+
 		JLabel lblId = new JLabel("id");
 		GridBagConstraints gbc_lblId = new GridBagConstraints();
 		gbc_lblId.insets = new Insets(0, 0, 5, 5);
 		gbc_lblId.gridx = 0;
 		gbc_lblId.gridy = 1;
 		contentPane.add(lblId, gbc_lblId);
+
 		txtIdtextbox = new JTextField();
 		KeyAdapter addBtnEnabler = new KeyAdapter() {
-
 			@Override
 			public void keyReleased(KeyEvent e) {
-				btnAdd.setEnabled(
-					!txtIdtextbox.getText().isBlank() && !nameTextField.getText().isBlank());
+				btnAdd.setEnabled(!txtIdtextbox.getText().isBlank() && !nameTextField.getText().isBlank());
 			}
+
 		};
 		txtIdtextbox.addKeyListener(addBtnEnabler);
 		txtIdtextbox.setName("idTextBox");
@@ -111,12 +111,14 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_txtIdtextbox.gridy = 1;
 		contentPane.add(txtIdtextbox, gbc_txtIdtextbox);
 		txtIdtextbox.setColumns(10);
+
 		lblName = new JLabel("name");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.insets = new Insets(0, 0, 5, 5);
 		gbc_lblName.gridx = 0;
 		gbc_lblName.gridy = 2;
 		contentPane.add(lblName, gbc_lblName);
+
 		nameTextField = new JTextField();
 		nameTextField.addKeyListener(addBtnEnabler);
 		nameTextField.setName("nameTextBox");
@@ -127,6 +129,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_textField.gridy = 2;
 		contentPane.add(nameTextField, gbc_textField);
 		nameTextField.setColumns(10);
+
 		btnAdd = new JButton("Add");
 		btnAdd.setEnabled(false);
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
@@ -134,8 +137,10 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_btnAdd.gridx = 0;
 		gbc_btnAdd.gridy = 3;
 		contentPane.add(btnAdd, gbc_btnAdd);
-		btnAdd.addActionListener(e -> schoolController
-			.newStudent(new Student(txtIdtextbox.getText(), nameTextField.getText())));
+
+		btnAdd.addActionListener(
+				e -> schoolController.newStudent(new Student(txtIdtextbox.getText(), nameTextField.getText())));
+
 		btnDeleteSelected = new JButton("Delete Selected");
 		btnDeleteSelected.setEnabled(false);
 		GridBagConstraints gbc_btnDeleteSelected = new GridBagConstraints();
@@ -143,6 +148,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_btnDeleteSelected.gridx = 1;
 		gbc_btnDeleteSelected.gridy = 3;
 		contentPane.add(btnDeleteSelected, gbc_btnDeleteSelected);
+
 		label = new JLabel(" ");
 		label.setEnabled(false);
 		label.setName("errorMessageLabel");
@@ -151,6 +157,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_label.gridx = 1;
 		gbc_label.gridy = 4;
 		contentPane.add(label, gbc_label);
+
 		scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
@@ -158,17 +165,12 @@ public class StudentSwingView extends JFrame implements StudentView {
 		gbc_scrollPane.gridx = 1;
 		gbc_scrollPane.gridy = 5;
 		contentPane.add(scrollPane, gbc_scrollPane);
+
 		scrollPane.setViewportView(listStudents);
 		listStudents.setName("studentList");
-		listStudents.addListSelectionListener(
-			e -> btnDeleteSelected.setEnabled(listStudents.getSelectedIndex() != -1));
-		btnDeleteSelected.addActionListener(
-			e -> schoolController.deleteStudent(listStudents.getSelectedValue()));
-	}
 
-	public void start() {
-		setVisible(true);
-		schoolController.allStudents();
+		listStudents.addListSelectionListener(e -> btnDeleteSelected.setEnabled(listStudents.getSelectedIndex() != -1));
+		btnDeleteSelected.addActionListener(e -> schoolController.deleteStudent(listStudents.getSelectedValue()));
 	}
 
 	@Override
@@ -179,6 +181,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 	@Override
 	public void showError(String message, Student student) {
 		invokeLater(() -> label.setText(message + student.toString()));
+
 	}
 
 	@Override
@@ -187,6 +190,7 @@ public class StudentSwingView extends JFrame implements StudentView {
 			resetErrorLabel();
 			listStudentsModel.addElement(student);
 		});
+
 	}
 
 	private void resetErrorLabel() {
@@ -199,14 +203,8 @@ public class StudentSwingView extends JFrame implements StudentView {
 		listStudentsModel.removeElement(student);
 	}
 
-	/**
-	 * @return the schoolController
-	 */
-	public SchoolController getSchoolController() {
-		return schoolController;
-	}
-
 	public void setSchoolController(SchoolController schoolController) {
 		this.schoolController = schoolController;
 	}
+
 }
